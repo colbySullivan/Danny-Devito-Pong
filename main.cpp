@@ -12,7 +12,7 @@ int main(){
     const float pi = 3.14159f;
     const float gameWidth = 800;
     const float gameHeight = 600;
-    sf::Vector2f paddleSize(25, 100);
+    sf::Vector2f paddleSize(50, 100);
     float ballRadius = 40.f;
 
     // Create the window of the application
@@ -47,6 +47,10 @@ int main(){
     rightPaddle.setOutlineColor(sf::Color::Black);
     rightPaddle.setFillColor(sf::Color(200, 100, 100));
     rightPaddle.setOrigin(paddleSize / 2.f);
+    sf::Texture rightPaddleTexture;
+    if(!rightPaddleTexture.loadFromFile("resources/rightpaddle.png"))
+        return EXIT_FAILURE;
+    rightPaddle.setTexture(&rightPaddleTexture);
 
     // Create the rum ball
     sf::CircleShape ball;
@@ -54,7 +58,7 @@ int main(){
     //ball.setOutlineThickness(2);
     ball.setOutlineColor(sf::Color::Black);
     ball.setFillColor(sf::Color::White);
-    ball.setOrigin(ballRadius / 2, ballRadius / 2);
+    ball.setOrigin(ballRadius / 1, ballRadius / 1);
     sf::Texture balltexture;
     if (!balltexture.loadFromFile("resources/rumball.png"))
         return EXIT_FAILURE;
