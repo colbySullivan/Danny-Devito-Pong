@@ -13,20 +13,20 @@ int main(){
     const float gameWidth = 800;
     const float gameHeight = 600;
     sf::Vector2f paddleSize(25, 100);
-    float ballRadius = 10.f;
+    float ballRadius = 40.f;
 
     // Create the window of the application
     sf::RenderWindow window(sf::VideoMode(static_cast<unsigned int>(gameWidth), static_cast<unsigned int>(gameHeight), 32), "SFML Tennis",
                             sf::Style::Titlebar | sf::Style::Close);
     window.setVerticalSyncEnabled(true);
 
-    // Create the SFML logo texture:
-    sf::Texture sfmlLogoTexture;
-    if(!sfmlLogoTexture.loadFromFile("resources/loadscreen.png"))
+    // Create the loading screen texture:
+    sf::Texture loadscreenTexture;
+    if(!loadscreenTexture.loadFromFile("resources/rumham.png"))
         return EXIT_FAILURE;
-    sf::Sprite sfmlLogo;
-    sfmlLogo.setTexture(sfmlLogoTexture);
-    sfmlLogo.setPosition(170, 50);
+    sf::Sprite loadscreen;
+    loadscreen.setTexture(loadscreenTexture);
+    loadscreen.setPosition(170, 50);
 
     // Create the left paddle
     sf::RectangleShape leftPaddle;
@@ -44,13 +44,17 @@ int main(){
     rightPaddle.setFillColor(sf::Color(200, 100, 100));
     rightPaddle.setOrigin(paddleSize / 2.f);
 
-    // Create the ball
+    // Create the rum ball
     sf::CircleShape ball;
     ball.setRadius(ballRadius - 3);
-    ball.setOutlineThickness(2);
+    //ball.setOutlineThickness(2);
     ball.setOutlineColor(sf::Color::Black);
     ball.setFillColor(sf::Color::White);
     ball.setOrigin(ballRadius / 2, ballRadius / 2);
+    sf::Texture balltexture;
+    if (!balltexture.loadFromFile("resources/rumball.png"))
+        return EXIT_FAILURE;
+    ball.setTexture(&balltexture);
 
     // Load the text font
     sf::Font font;
@@ -217,7 +221,7 @@ int main(){
         else{
             // Draw the pause message
             window.draw(pauseMessage);
-            window.draw(sfmlLogo);
+            window.draw(loadscreen);
         }
 
         // Display things on screen
