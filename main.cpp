@@ -35,6 +35,10 @@ int main(){
     leftPaddle.setOutlineColor(sf::Color::Black);
     leftPaddle.setFillColor(sf::Color(100, 100, 200));
     leftPaddle.setOrigin(paddleSize / 2.f);
+    sf::Texture leftPaddleTexture;
+    if(!leftPaddleTexture.loadFromFile("resources/leftpaddle.png"))
+        return EXIT_FAILURE;
+    leftPaddle.setTexture(&leftPaddleTexture);
 
     // Create the right paddle
     sf::RectangleShape rightPaddle;
