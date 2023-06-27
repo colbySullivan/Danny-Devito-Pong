@@ -3,6 +3,7 @@ Commands to build statically and dynamically are provided.
 
 # Running
 
+## Makefile run
 To compile
 ```
 g++ -c main.cpp -I"C:\SFML-2.6.0\include"
@@ -23,9 +24,14 @@ To get rid of the main.o file run
 make clean
 ```
 
+## Bash run
+```
+.\run.bat
+```
+
 # Dependencies
-The latest version of SMFL is required to run the program.
+Install of SMFL is required to run the program.
 
 https://www.sfml-dev.org/download.php
 
-Make sure to place the folder into the C or replace the location in the run/compile commands.
+Make sure to place the folder into the C drive or replace the location in the run/compile commands.
