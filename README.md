@@ -25,8 +25,17 @@ make clean
 ```
 
 ## Bash run
+Static build
 ```
-.\run.bat
+.\static.bat
+```
+Dynamic build
+```
+.\dynamic.bat
+```
+Remove main.o
+```
+.\clean.bat
 ```
 
 # Dependencies
