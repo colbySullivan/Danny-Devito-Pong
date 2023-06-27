@@ -24,16 +24,16 @@ To get rid of the main.o file run
 make clean
 ```
 
-## Bash run
-Static build
+# Scripts
+### Static build
 ```
 .\static.bat
 ```
-Dynamic build
+### Dynamic build
 ```
 .\dynamic.bat
 ```
-Remove main.o
+### Remove main.o
 ```
 .\clean.bat
 ```
