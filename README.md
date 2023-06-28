@@ -6,12 +6,12 @@ Commands to build statically and dynamically are provided.
 ## Makefile run
 To compile
 ```
-g++ -c main.cpp -I"C:\SFML-2.6.0\include"
+g++ -c main.cpp -I"SFML-2.6.0\include"
 ```
 
 Create runnable exe
 ```
-g++ main.o -o main -LC:\SFML-2.6.0\lib -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.o -o main -L"SFML-2.6.0\lib" -lsfml-graphics -lsfml-window -lsfml-system
 ```
 
 If make is installed on your device then run the following command
