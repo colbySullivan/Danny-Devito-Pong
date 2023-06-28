@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <string> 
 
 void Game::initVariables(){
     this->pi = 3.14159f;
@@ -11,6 +12,9 @@ void Game::initVariables(){
     this->rightPaddleSpeed = 0.f;
     this->ballSpeed = 400.f;
     this->ballAngle = 0.f; // TODO
+    this->isPlaying = false;
+    this->userPoint = 0;
+    this->cpuPoint = 0;
 
 }
 
@@ -76,6 +80,17 @@ void Game::initMessages(){
     this->pauseMessage.setPosition(170.f, 200.f);
     this->pauseMessage.setFillColor(sf::Color::White);
     this->pauseMessage.setString("Welcome to Danny Pong!\n\nPress space to start the game.");
+    this->countScore();
+}
+
+void Game::countScore(){
+    this->scoreCard.setFont(font);
+    this->scoreCard.setCharacterSize(40);
+    this->scoreCard.setPosition(170.f, 200.f);
+    this->scoreCard.setFillColor(sf::Color::White);
+    std::string cpuScore = std::to_string(this->cpuPoint);
+    std::string userScore = std::to_string(this->userPoint);
+    this->scoreCard.setString(userScore + " to " + cpuScore);
 }
 
 const bool Game::running() const{
@@ -168,13 +183,17 @@ void Game::movePaddles(){
 void Game::checkCollisions(){
     const std::string inputString = "Press space to restart or\nescape to exit.";
     // Check collisions between the ball and the screen
-    if (ball.getPosition().x - ballRadius < 0.f){
+    if (ball.getPosition().x - ballRadius <= 0.f){
         this->isPlaying = false;
         pauseMessage.setString("You Lost!\n\n" + inputString);
+        this->cpuPoint++;
+        this->countScore();
     }
     if (ball.getPosition().x + ballRadius > gameWidth){
         this->isPlaying = false;
         pauseMessage.setString("You Won!\n\n" + inputString);
+        this->userPoint++;
+        this->countScore();
     }
     if (ball.getPosition().y - ballRadius < 0.f){
         ballAngle = -ballAngle;
@@ -195,7 +214,7 @@ void Game::checkCollisions(){
             ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
         else
             ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
-
+        
         ball.setPosition(leftPaddle.getPosition().x + ballRadius + paddleSize.x / 2 + 0.1f, ball.getPosition().y);
     }
 
@@ -227,28 +246,25 @@ void Game::checkCollisions(){
     } 
 }
 void Game::point(){
-    
     this->middleLine.setPosition(300, 400);
 }
 void Game::rungame(){
-    this->isPlaying = false;
-    this->userPoint = 0;
-    this->cpuPoint = 0;
     while (this->window->isOpen()){
         // Handle events
         this->pollEvents();
-        this->movePaddles();
-        this->checkCollisions();
 
         // Clear the window
         this->window->clear(sf::Color(0, 0, 0));
 
         if (this->isPlaying){
             // Draw the paddles and the ball
+            this->window->draw(scoreCard);
             this->window->draw(leftPaddle);
             this->window->draw(rightPaddle);
             this->window->draw(ball);
             this->window->draw(middleLine);
+            this->movePaddles();
+            this->checkCollisions();
         }
         else{
             // Draw the pause message

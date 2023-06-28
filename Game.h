@@ -60,6 +60,7 @@ private:
 
     // Create text
     sf::Text pauseMessage;
+    sf::Text scoreCard;
 
     //Running events
     sf::Event event;
@@ -75,6 +76,7 @@ private:
     void initBall();
     void initFonts();
 	void initMessages();
+    void countScore();
 public:
 	//Constructors / Destructors
 	Game();
