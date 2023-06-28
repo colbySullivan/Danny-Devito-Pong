@@ -21,15 +21,23 @@
 	Wrapper class.
 */
 
-class Game
-{
+class Game{
 private:
-    // Constants
+    // Variables
     float pi;
     float gameWidth;
     float gameHeight;
     sf::Vector2f paddleSize;
     float ballRadius;
+
+    sf::Clock AITimer;
+    sf::Time AITime;
+    float paddleSpeed;
+    float rightPaddleSpeed;
+    float ballSpeed;
+    float ballAngle;
+
+    sf::Clock clock;
 
     sf::RenderWindow* window;
     sf::Sprite loadscreen;
@@ -43,16 +51,30 @@ private:
     sf::RectangleShape rightPaddle;
     sf::Texture rightPaddleTexture;
 
+    // Create ball
+    sf::CircleShape ball;
+    sf::Texture balltexture;
+
+    // Set font
+    sf::Font font;
+
+    // Create text
+    sf::Text pauseMessage;
+
     void initVariables();
     void initWindow();
     void initPaddles();
+    void initBall();
     void initFonts();
-	void initText();
+	void initMessages();
 public:
 	//Constructors / Destructors
 	Game();
 	virtual ~Game();
 
 	//Accessors
-	
+	const bool running() const;
+
+    // run game
+    void rungame();
 };

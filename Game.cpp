@@ -4,8 +4,13 @@ void Game::initVariables(){
     this->pi = 3.14159f;
     this->gameWidth = 800;
     this->gameHeight = 600;
-    this->paddleSize(50, 100);
+    this->paddleSize = sf::Vector2f(50, 100);
     this->ballRadius = 40.f;
+    this->AITime = sf::seconds(0.1f);
+    this->paddleSpeed = 400.f;
+    this->rightPaddleSpeed = 0.f;
+    this->ballSpeed = 400.f;
+    this->ballAngle = 0.f; // TODO
 
 }
 
@@ -42,5 +47,45 @@ void Game::initPaddles(){
     rightPaddle.setTexture(&rightPaddleTexture);
 
 }
+void Game::initBall(){
+    // Create the rum ball
+    this->ball.setRadius(ballRadius - 3);
+    //this->ball.setOutlineThickness(2);
+    this->ball.setOutlineColor(sf::Color::Black);
+    this->ball.setFillColor(sf::Color::White);
+    this->ball.setOrigin(ballRadius / 1, ballRadius / 1);
+    if (!this->balltexture.loadFromFile("resources/rumball.png"))
+        return exit(0);
+    this->ball.setTexture(&balltexture);
+}
 
+void Game::initFonts(){
+    if (!this->font.loadFromFile("resources/tuffy.ttf"))
+        return exit(0);
+}
 
+void Game::initMessages(){
+    this->pauseMessage.setFont(font);
+    this->pauseMessage.setCharacterSize(40);
+    this->pauseMessage.setPosition(170.f, 200.f);
+    this->pauseMessage.setFillColor(sf::Color::White);
+    this->pauseMessage.setString("Welcome to Danny Pong!\n\nPress space to start the game.");
+}
+
+const bool Game::running() const{
+	return this->window->isOpen();
+}
+
+void rungame(){
+    this->window.display();  //Start working on this
+}
+
+Game::Game()
+{
+	this->initVariables();
+	this->initWindow();
+    this->initPaddles();
+    this->initBall();
+	this->initFonts();
+	this->initMessages();
+}
