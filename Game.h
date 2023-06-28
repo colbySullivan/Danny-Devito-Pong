@@ -29,16 +29,15 @@ private:
     float gameHeight;
     sf::Vector2f paddleSize;
     float ballRadius;
-
     sf::Clock AITimer;
     sf::Time AITime;
     float paddleSpeed;
     float rightPaddleSpeed;
     float ballSpeed;
     float ballAngle;
-
     sf::Clock clock;
 
+    //Window setup
     sf::RenderWindow* window;
     sf::Sprite loadscreen;
 
@@ -50,6 +49,7 @@ private:
     sf::Texture leftPaddleTexture;
     sf::RectangleShape rightPaddle;
     sf::Texture rightPaddleTexture;
+    sf::RectangleShape middleLine;
 
     // Create ball
     sf::CircleShape ball;
@@ -64,6 +64,10 @@ private:
     //Running events
     sf::Event event;
     bool isPlaying;
+
+    //Game points
+    int userPoint;
+    int cpuPoint;
 
     void initVariables();
     void initWindow();
@@ -82,5 +86,6 @@ public:
     void movePaddles();
     void checkCollisions();
     void pollEvents();
+    void point();
     void rungame();
 };

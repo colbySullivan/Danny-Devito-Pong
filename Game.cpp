@@ -46,6 +46,12 @@ void Game::initPaddles(){
         return exit(0);
     rightPaddle.setTexture(&rightPaddleTexture);
 
+    this->middleLine.setSize(paddleSize - sf::Vector2f(3, 3));
+    this->middleLine.setOutlineColor(sf::Color::Red);
+    this->middleLine.setOutlineThickness(3);
+    this->middleLine.setPosition(300, 400);
+
+
 }
 void Game::initBall(){
     // Create the rum ball
@@ -157,30 +163,99 @@ void Game::movePaddles(){
         float factor = ballSpeed * deltaTime;
         ball.move(std::cos(ballAngle) * factor, std::sin(ballAngle) * factor);
 
-        //this->checkCollisions();
     }
+}
+void Game::checkCollisions(){
+    const std::string inputString = "Press space to restart or\nescape to exit.";
+    // Check collisions between the ball and the screen
+    if (ball.getPosition().x - ballRadius < 0.f){
+        this->isPlaying = false;
+        pauseMessage.setString("You Lost!\n\n" + inputString);
+    }
+    if (ball.getPosition().x + ballRadius > gameWidth){
+        this->isPlaying = false;
+        pauseMessage.setString("You Won!\n\n" + inputString);
+    }
+    if (ball.getPosition().y - ballRadius < 0.f){
+        ballAngle = -ballAngle;
+        ball.setPosition(ball.getPosition().x, ballRadius + 0.1f);
+    }
+    if (ball.getPosition().y + ballRadius > gameHeight){
+        ballAngle = -ballAngle;
+        ball.setPosition(ball.getPosition().x, gameHeight - ballRadius - 0.1f);
+    }
+
+    // Check the collisions between the ball and the paddles
+    // Left Paddle
+    if (ball.getPosition().x - ballRadius < leftPaddle.getPosition().x + paddleSize.x / 2 &&
+        ball.getPosition().x - ballRadius > leftPaddle.getPosition().x &&
+        ball.getPosition().y + ballRadius >= leftPaddle.getPosition().y - paddleSize.y / 2 &&
+        ball.getPosition().y - ballRadius <= leftPaddle.getPosition().y + paddleSize.y / 2){
+        if (ball.getPosition().y > leftPaddle.getPosition().y)
+            ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
+        else
+            ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+
+        ball.setPosition(leftPaddle.getPosition().x + ballRadius + paddleSize.x / 2 + 0.1f, ball.getPosition().y);
+    }
+
+    // Right Paddle
+    if (ball.getPosition().x + ballRadius > rightPaddle.getPosition().x - paddleSize.x / 2 &&
+        ball.getPosition().x + ballRadius < rightPaddle.getPosition().x &&
+        ball.getPosition().y + ballRadius >= rightPaddle.getPosition().y - paddleSize.y / 2 &&
+        ball.getPosition().y - ballRadius <= rightPaddle.getPosition().y + paddleSize.y / 2){
+        if (ball.getPosition().y > rightPaddle.getPosition().y)
+            ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
+        else
+            ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+
+        ball.setPosition(rightPaddle.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
+    }   
+
+    // Box
+    if (ball.getPosition().x + ballRadius > middleLine.getPosition().x - paddleSize.x / 2 &&
+        ball.getPosition().x + ballRadius < middleLine.getPosition().x &&
+        ball.getPosition().y + ballRadius >= middleLine.getPosition().y - paddleSize.y / 2 &&
+        ball.getPosition().y - ballRadius <= middleLine.getPosition().y + paddleSize.y / 2){
+        if (ball.getPosition().y > middleLine.getPosition().y)
+            ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
+        else
+            ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+
+        ball.setPosition(middleLine.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
+        this->point();
+    } 
+}
+void Game::point(){
+    
+    this->middleLine.setPosition(300, 400);
 }
 void Game::rungame(){
     this->isPlaying = false;
+    this->userPoint = 0;
+    this->cpuPoint = 0;
     while (this->window->isOpen()){
         // Handle events
         this->pollEvents();
         this->movePaddles();
+        this->checkCollisions();
 
         // Clear the window
-        this->window->clear(sf::Color(50, 50, 50));
+        this->window->clear(sf::Color(0, 0, 0));
 
         if (this->isPlaying){
             // Draw the paddles and the ball
             this->window->draw(leftPaddle);
             this->window->draw(rightPaddle);
             this->window->draw(ball);
+            this->window->draw(middleLine);
         }
         else{
             // Draw the pause message
             this->window->draw(pauseMessage);
             this->window->draw(loadscreen);
         }
+
         // Display things on screen
         this->window->display();
     }
