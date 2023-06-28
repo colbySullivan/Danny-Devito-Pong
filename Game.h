@@ -61,6 +61,10 @@ private:
     // Create text
     sf::Text pauseMessage;
 
+    //Running events
+    sf::Event event;
+    bool isPlaying;
+
     void initVariables();
     void initWindow();
     void initPaddles();
@@ -74,6 +78,9 @@ public:
 	//Accessors
 	const bool running() const;
 
-    // run game
+    //Functions
+    void movePaddles();
+    void checkCollisions();
+    void pollEvents();
     void rungame();
 };
