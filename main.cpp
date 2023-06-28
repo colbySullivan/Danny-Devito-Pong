@@ -2,10 +2,7 @@
 #include "Game.h"
 #include "Game.cpp"
 
-//using namespace sf;
-
-int main()
-{
+int main(){
 	//Init Game engine
 	Game game;
 
