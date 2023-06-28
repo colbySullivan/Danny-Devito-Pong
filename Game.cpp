@@ -76,8 +76,8 @@ const bool Game::running() const{
 	return this->window->isOpen();
 }
 
-void rungame(){
-    this->window.display();  //Start working on this
+void Game::rungame(){
+    this->window->display();  //Start working on this
 }
 
 Game::Game()

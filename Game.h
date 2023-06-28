@@ -70,7 +70,6 @@ private:
 public:
 	//Constructors / Destructors
 	Game();
-	virtual ~Game();
 
 	//Accessors
 	const bool running() const;
