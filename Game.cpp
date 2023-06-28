@@ -50,10 +50,12 @@ void Game::initPaddles(){
         return exit(0);
     rightPaddle.setTexture(&rightPaddleTexture);
 
+    // Moving box
     this->middleLine.setSize(paddleSize - sf::Vector2f(3, 3));
-    this->middleLine.setOutlineColor(sf::Color::Red);
+    this->middleLine.setOutlineColor(sf::Color::Black);
     this->middleLine.setOutlineThickness(3);
     this->middleLine.setPosition(300, 400);
+    this->middleLine.setTexture(&loadscreenTexture);
 
 
 }
@@ -86,7 +88,7 @@ void Game::initMessages(){
 void Game::countScore(){
     this->scoreCard.setFont(font);
     this->scoreCard.setCharacterSize(40);
-    this->scoreCard.setPosition(170.f, 200.f);
+    this->scoreCard.setPosition(333.f, 25.f);
     this->scoreCard.setFillColor(sf::Color::White);
     std::string cpuScore = std::to_string(this->cpuPoint);
     std::string userScore = std::to_string(this->userPoint);
@@ -246,7 +248,7 @@ void Game::checkCollisions(){
     } 
 }
 void Game::point(){
-    this->middleLine.setPosition(300, 400);
+    this->middleLine.setPosition(rand() % 700, rand() % 500);
 }
 void Game::rungame(){
     while (this->window->isOpen()){
