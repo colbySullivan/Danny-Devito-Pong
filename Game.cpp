@@ -14,9 +14,11 @@ void Game::initVariables(){
     this->baseBallSpeed = 400.f;
     this->ballSpeed = 400.f;
     this->ballAngle = 0.f; // TODO
+    this->dannyAngle = 0.f;
     this->isPlaying = false;
     this->userPoint = 0;
     this->cpuPoint = 0;
+    this->dannySpeed = 400.f;
 
 }
 
@@ -132,9 +134,10 @@ void Game::pollEvents(){
                     // Reset the ball angle
                     do{
                         // Make sure the ball initial angle is not too much vertical
+                        dannyAngle = static_cast<float>(std::rand() % 360) * 2.f * pi / 360.f;
                         ballAngle = static_cast<float>(std::rand() % 360) * 2.f * pi / 360.f;
                     }
-                    while (std::abs(std::cos(ballAngle)) < 0.7f);
+                    while (std::abs(std::cos(ballAngle)) < 0.7f && std::abs(std::cos(dannyAngle)) < 0.7f);
                 }
             }
 
@@ -188,6 +191,8 @@ void Game::movePaddles(){
         // Move the ball
         float factor = ballSpeed * deltaTime;
         ball.move(std::cos(ballAngle) * factor, std::sin(ballAngle) * factor);
+        float dannyFactor = dannySpeed * deltaTime;
+        sprite.move(std::cos(dannyAngle) * dannyFactor, std::sin(dannyAngle) * dannyFactor);
 
     }
 }
@@ -209,11 +214,11 @@ void Game::checkCollisions(){
         this->countScore();
     }
     if (ball.getPosition().y - ballRadius < 0.f){
-        ballAngle = -ballAngle;
+        this->ballAngle = -ballAngle;
         ball.setPosition(ball.getPosition().x, ballRadius + 0.1f);
     }
     if (ball.getPosition().y + ballRadius > gameHeight){
-        ballAngle = -ballAngle;
+        this->ballAngle = -ballAngle;
         ball.setPosition(ball.getPosition().x, gameHeight - ballRadius - 0.1f);
     }
 
@@ -224,11 +229,11 @@ void Game::checkCollisions(){
         ball.getPosition().y + ballRadius >= leftPaddle.getPosition().y - paddleSize.y / 2 &&
         ball.getPosition().y - ballRadius <= leftPaddle.getPosition().y + paddleSize.y / 2){
         if (ball.getPosition().y > leftPaddle.getPosition().y)
-            ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
+            this->ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
         else
-            ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+            this->ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
         
-        ball.setPosition(leftPaddle.getPosition().x + ballRadius + paddleSize.x / 2 + 0.1f, ball.getPosition().y);
+        this->ball.setPosition(leftPaddle.getPosition().x + ballRadius + paddleSize.x / 2 + 0.1f, ball.getPosition().y);
     }
 
     // Right Paddle
@@ -237,11 +242,11 @@ void Game::checkCollisions(){
         ball.getPosition().y + ballRadius >= rightPaddle.getPosition().y - paddleSize.y / 2 &&
         ball.getPosition().y - ballRadius <= rightPaddle.getPosition().y + paddleSize.y / 2){
         if (ball.getPosition().y > rightPaddle.getPosition().y)
-            ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
+            this->ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
         else
-            ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+            this->ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
 
-        ball.setPosition(rightPaddle.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
+        this->ball.setPosition(rightPaddle.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
     }   
 
     // Box
@@ -250,14 +255,34 @@ void Game::checkCollisions(){
         ball.getPosition().y + ballRadius >= sprite.getPosition().y - paddleSize.y / 2 &&
         ball.getPosition().y - ballRadius <= sprite.getPosition().y + paddleSize.y / 2){
         if (ball.getPosition().y > sprite.getPosition().y)
-            ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
+            this->ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
         else
-            ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+            this->ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
 
-        ball.setPosition(sprite.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
+        this->ball.setPosition(sprite.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
         this->point();
         this->paddleSpeed+=100;
-    } 
+    }
+    this->moveDanny();
+}
+void Game::moveDanny(){
+    // Check collisions between the danny and the screen
+    if (sprite.getPosition().x <= 0.f){
+        this->dannyAngle = pi - dannyAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+        this->sprite.setPosition(0.1f, sprite.getPosition().y);
+    }
+    if (sprite.getPosition().x > gameWidth){
+        this->dannyAngle = pi - dannyAngle - static_cast<float>(std::rand() % 20) * pi / 180;
+        this->sprite.setPosition(gameWidth, sprite.getPosition().y);
+    }
+    if (sprite.getPosition().y - ballRadius < 0.f){
+        this->dannyAngle = -dannyAngle;
+        this->sprite.setPosition(sprite.getPosition().x, ballRadius + 0.1f);
+    }
+    if (sprite.getPosition().y + ballRadius > gameHeight){
+        this->dannyAngle = -dannyAngle;
+        this->sprite.setPosition(sprite.getPosition().x, gameHeight - ballRadius - 0.1f);
+    }
 }
 void Game::point(){
     this->ballSpeed+=100;
