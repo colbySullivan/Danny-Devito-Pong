@@ -37,8 +37,10 @@ private:
     float baseBallSpeed;
     float ballSpeed;
     float ballAngle;
+    float dannyAngle;
     sf::Clock clock;
     sf::Clock dannyClock;
+    int dannySpeed;
 
     //Window setup
     sf::RenderWindow* window;
@@ -84,6 +86,8 @@ private:
 	void initMessages();
     void countScore();
     void danny();
+    void moveDanny();
+    void checkDanny();
 public:
 	//Constructors / Destructors
 	Game();
