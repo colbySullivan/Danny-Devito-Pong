@@ -8,8 +8,10 @@ void Game::initVariables(){
     this->paddleSize = sf::Vector2f(50, 100);
     this->ballRadius = 40.f;
     this->AITime = sf::seconds(0.1f);
+    this->basePaddleSpeed = 400.f;
     this->paddleSpeed = 400.f;
     this->rightPaddleSpeed = 0.f;
+    this->baseBallSpeed = 400.f;
     this->ballSpeed = 400.f;
     this->ballAngle = 0.f; // TODO
     this->isPlaying = false;
@@ -27,6 +29,11 @@ void Game::initWindow(){
         exit(0);
     this->loadscreen.setTexture(loadscreenTexture);
     this->loadscreen.setPosition(170, 50);
+
+    this->dannyTexture.loadFromFile("resources/dannysprite.png");
+    this->dannySprite = sf::IntRect(32, 0, 32, 48); //128 x 192
+    this->sprite = sf::Sprite(dannyTexture,dannySprite);
+    this->sprite.setPosition(500, 100);
 }
 
 void Game::initPaddles(){
@@ -93,6 +100,8 @@ void Game::countScore(){
     std::string cpuScore = std::to_string(this->cpuPoint);
     std::string userScore = std::to_string(this->userPoint);
     this->scoreCard.setString(userScore + " to " + cpuScore);
+    this->ballSpeed = baseBallSpeed;
+    this->paddleSpeed = basePaddleSpeed;
 }
 
 const bool Game::running() const{
@@ -189,12 +198,14 @@ void Game::checkCollisions(){
         this->isPlaying = false;
         pauseMessage.setString("You Lost!\n\n" + inputString);
         this->cpuPoint++;
+        this->point(); // Move box after win
         this->countScore();
     }
     if (ball.getPosition().x + ballRadius > gameWidth){
         this->isPlaying = false;
         pauseMessage.setString("You Won!\n\n" + inputString);
         this->userPoint++;
+        this->point(); // Move box after win
         this->countScore();
     }
     if (ball.getPosition().y - ballRadius < 0.f){
@@ -234,21 +245,34 @@ void Game::checkCollisions(){
     }   
 
     // Box
-    if (ball.getPosition().x + ballRadius > middleLine.getPosition().x - paddleSize.x / 2 &&
-        ball.getPosition().x + ballRadius < middleLine.getPosition().x &&
-        ball.getPosition().y + ballRadius >= middleLine.getPosition().y - paddleSize.y / 2 &&
-        ball.getPosition().y - ballRadius <= middleLine.getPosition().y + paddleSize.y / 2){
-        if (ball.getPosition().y > middleLine.getPosition().y)
+    if (ball.getPosition().x + ballRadius > sprite.getPosition().x - paddleSize.x / 2 &&
+        ball.getPosition().x + ballRadius < sprite.getPosition().x &&
+        ball.getPosition().y + ballRadius >= sprite.getPosition().y - paddleSize.y / 2 &&
+        ball.getPosition().y - ballRadius <= sprite.getPosition().y + paddleSize.y / 2){
+        if (ball.getPosition().y > sprite.getPosition().y)
             ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
         else
             ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
 
-        ball.setPosition(middleLine.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
+        ball.setPosition(sprite.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
         this->point();
+        this->paddleSpeed+=100;
     } 
 }
 void Game::point(){
-    this->middleLine.setPosition(rand() % 700, rand() % 500);
+    this->ballSpeed+=100;
+    this->sprite.setPosition(rand() % 700 + 100, rand() % 500 + 100);
+}
+void Game::danny(){
+    if (this->dannyClock.getElapsedTime().asSeconds() > 0.5f){
+      if (dannySprite.left > 64) 
+        dannySprite.left = 0;
+      else
+        dannySprite.left += 32;
+
+      sprite.setTextureRect(dannySprite);
+      this->dannyClock.restart();
+    }
 }
 void Game::rungame(){
     while (this->window->isOpen()){
@@ -264,12 +288,15 @@ void Game::rungame(){
             this->window->draw(leftPaddle);
             this->window->draw(rightPaddle);
             this->window->draw(ball);
-            this->window->draw(middleLine);
+            this->window->draw(sprite);
+            this->danny();
             this->movePaddles();
             this->checkCollisions();
         }
         else{
             // Draw the pause message
+            this->danny();
+            this->window->draw(sprite);
             this->window->draw(pauseMessage);
             this->window->draw(loadscreen);
         }

@@ -32,14 +32,20 @@ private:
     sf::Clock AITimer;
     sf::Time AITime;
     float paddleSpeed;
+    float basePaddleSpeed;
     float rightPaddleSpeed;
+    float baseBallSpeed;
     float ballSpeed;
     float ballAngle;
     sf::Clock clock;
+    sf::Clock dannyClock;
 
     //Window setup
     sf::RenderWindow* window;
     sf::Sprite loadscreen;
+    sf::Texture dannyTexture;
+    sf::IntRect dannySprite;
+    sf::Sprite sprite;
 
     // Create the loading screen texture:
     sf::Texture loadscreenTexture;
@@ -77,6 +83,7 @@ private:
     void initFonts();
 	void initMessages();
     void countScore();
+    void danny();
 public:
 	//Constructors / Destructors
 	Game();
