@@ -29,6 +29,11 @@ void Game::initWindow(){
         exit(0);
     this->loadscreen.setTexture(loadscreenTexture);
     this->loadscreen.setPosition(170, 50);
+
+    this->dannyTexture.loadFromFile("resources/dannysprite.png");
+    this->dannySprite = sf::IntRect(32, 0, 32, 48); //128 x 192
+    this->sprite = sf::Sprite(dannyTexture,dannySprite);
+    this->sprite.setPosition(500, 100);
 }
 
 void Game::initPaddles(){
@@ -258,6 +263,17 @@ void Game::point(){
     this->ballSpeed+=100;
     this->middleLine.setPosition(rand() % 700 + 100, rand() % 500 + 100);
 }
+void Game::danny(){
+    if (this->dannyClock.getElapsedTime().asSeconds() > 1.0f){
+      if (dannySprite.left > 64) 
+        dannySprite.left = 0;
+      else
+        dannySprite.left += 32;
+
+      sprite.setTextureRect(dannySprite);
+      this->dannyClock.restart();
+    }
+}
 void Game::rungame(){
     while (this->window->isOpen()){
         // Handle events
@@ -278,6 +294,8 @@ void Game::rungame(){
         }
         else{
             // Draw the pause message
+            this->danny();
+            this->window->draw(sprite);
             this->window->draw(pauseMessage);
             this->window->draw(loadscreen);
         }
