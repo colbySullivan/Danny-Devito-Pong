@@ -10,6 +10,7 @@ void Game::initVariables(){
     this->AITime = sf::seconds(0.1f);
     this->paddleSpeed = 400.f;
     this->rightPaddleSpeed = 0.f;
+    this->baseBallSpeed = 400.f;
     this->ballSpeed = 400.f;
     this->ballAngle = 0.f; // TODO
     this->isPlaying = false;
@@ -93,6 +94,7 @@ void Game::countScore(){
     std::string cpuScore = std::to_string(this->cpuPoint);
     std::string userScore = std::to_string(this->userPoint);
     this->scoreCard.setString(userScore + " to " + cpuScore);
+    this->ballSpeed = baseBallSpeed;
 }
 
 const bool Game::running() const{
@@ -189,12 +191,14 @@ void Game::checkCollisions(){
         this->isPlaying = false;
         pauseMessage.setString("You Lost!\n\n" + inputString);
         this->cpuPoint++;
+        this->point(); // Move box after win
         this->countScore();
     }
     if (ball.getPosition().x + ballRadius > gameWidth){
         this->isPlaying = false;
         pauseMessage.setString("You Won!\n\n" + inputString);
         this->userPoint++;
+        this->point(); // Move box after win
         this->countScore();
     }
     if (ball.getPosition().y - ballRadius < 0.f){
@@ -248,7 +252,8 @@ void Game::checkCollisions(){
     } 
 }
 void Game::point(){
-    this->middleLine.setPosition(rand() % 700, rand() % 500);
+    this->ballSpeed+=100;
+    this->middleLine.setPosition(rand() % 700 + 100, rand() % 500 + 100);
 }
 void Game::rungame(){
     while (this->window->isOpen()){

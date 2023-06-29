@@ -33,6 +33,7 @@ private:
     sf::Time AITime;
     float paddleSpeed;
     float rightPaddleSpeed;
+    float baseBallSpeed;
     float ballSpeed;
     float ballAngle;
     sf::Clock clock;
