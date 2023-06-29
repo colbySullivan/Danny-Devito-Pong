@@ -245,26 +245,26 @@ void Game::checkCollisions(){
     }   
 
     // Box
-    if (ball.getPosition().x + ballRadius > middleLine.getPosition().x - paddleSize.x / 2 &&
-        ball.getPosition().x + ballRadius < middleLine.getPosition().x &&
-        ball.getPosition().y + ballRadius >= middleLine.getPosition().y - paddleSize.y / 2 &&
-        ball.getPosition().y - ballRadius <= middleLine.getPosition().y + paddleSize.y / 2){
-        if (ball.getPosition().y > middleLine.getPosition().y)
+    if (ball.getPosition().x + ballRadius > sprite.getPosition().x - paddleSize.x / 2 &&
+        ball.getPosition().x + ballRadius < sprite.getPosition().x &&
+        ball.getPosition().y + ballRadius >= sprite.getPosition().y - paddleSize.y / 2 &&
+        ball.getPosition().y - ballRadius <= sprite.getPosition().y + paddleSize.y / 2){
+        if (ball.getPosition().y > sprite.getPosition().y)
             ballAngle = pi - ballAngle + static_cast<float>(std::rand() % 20) * pi / 180;
         else
             ballAngle = pi - ballAngle - static_cast<float>(std::rand() % 20) * pi / 180;
 
-        ball.setPosition(middleLine.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
+        ball.setPosition(sprite.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
         this->point();
         this->paddleSpeed+=100;
     } 
 }
 void Game::point(){
     this->ballSpeed+=100;
-    this->middleLine.setPosition(rand() % 700 + 100, rand() % 500 + 100);
+    this->sprite.setPosition(rand() % 700 + 100, rand() % 500 + 100);
 }
 void Game::danny(){
-    if (this->dannyClock.getElapsedTime().asSeconds() > 1.0f){
+    if (this->dannyClock.getElapsedTime().asSeconds() > 0.5f){
       if (dannySprite.left > 64) 
         dannySprite.left = 0;
       else
@@ -288,7 +288,8 @@ void Game::rungame(){
             this->window->draw(leftPaddle);
             this->window->draw(rightPaddle);
             this->window->draw(ball);
-            this->window->draw(middleLine);
+            this->window->draw(sprite);
+            this->danny();
             this->movePaddles();
             this->checkCollisions();
         }
