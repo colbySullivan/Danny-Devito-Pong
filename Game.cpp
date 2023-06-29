@@ -8,6 +8,7 @@ void Game::initVariables(){
     this->paddleSize = sf::Vector2f(50, 100);
     this->ballRadius = 40.f;
     this->AITime = sf::seconds(0.1f);
+    this->basePaddleSpeed = 400.f;
     this->paddleSpeed = 400.f;
     this->rightPaddleSpeed = 0.f;
     this->baseBallSpeed = 400.f;
@@ -95,6 +96,7 @@ void Game::countScore(){
     std::string userScore = std::to_string(this->userPoint);
     this->scoreCard.setString(userScore + " to " + cpuScore);
     this->ballSpeed = baseBallSpeed;
+    this->paddleSpeed = basePaddleSpeed;
 }
 
 const bool Game::running() const{
@@ -249,6 +251,7 @@ void Game::checkCollisions(){
 
         ball.setPosition(middleLine.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
         this->point();
+        this->paddleSpeed+=100;
     } 
 }
 void Game::point(){
