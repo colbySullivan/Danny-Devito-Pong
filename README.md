@@ -38,6 +38,10 @@ make clean
 .\clean.bat
 ```
 
+## Demo
+![PongDemo](https://github.com/colbySullivan/Danny-Devito-Pong/assets/88957296/809a4a51-76d9-4b8c-9a42-11979035a47e)
+
+
 # Dependencies
 Install of SMFL is required to run the program.
 
