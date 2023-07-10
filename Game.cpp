@@ -23,7 +23,7 @@ void Game::initVariables(){
 }
 
 void Game::initWindow(){
-	this->window = new sf::RenderWindow(sf::VideoMode(static_cast<unsigned int>(gameWidth), static_cast<unsigned int>(gameHeight), 32), "SFML Tennis",
+	this->window = new sf::RenderWindow(sf::VideoMode(static_cast<unsigned int>(gameWidth), static_cast<unsigned int>(gameHeight), 32), "Danny Pong",
                             sf::Style::Titlebar | sf::Style::Close);
     this->window->setVerticalSyncEnabled(true);
 
