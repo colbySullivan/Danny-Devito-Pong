@@ -14,4 +14,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: make
+      run: g++ -c main.cpp -I"SFML-2.6.0\include"
