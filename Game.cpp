@@ -1,6 +1,9 @@
 #include "Game.hpp"
 #include <string> 
 
+/*
+  Description: Initialize various variables used in the game.
+ */
 void Game::initVariables(){
     this->pi = 3.14159f;
     this->gameWidth = 800;
@@ -22,6 +25,9 @@ void Game::initVariables(){
 
 }
 
+/*
+  Description: Initialize the game window and its properties.
+ */
 void Game::initWindow(){
 	this->window = new sf::RenderWindow(sf::VideoMode(static_cast<unsigned int>(gameWidth), static_cast<unsigned int>(gameHeight), 32), "Danny Pong",
                             sf::Style::Titlebar | sf::Style::Close);
@@ -38,6 +44,9 @@ void Game::initWindow(){
     this->sprite.setPosition(500, 100);
 }
 
+/*
+  Description: Initialize the paddles used in the game.
+ */
 void Game::initPaddles(){
       // Create the left paddle
     this->leftPaddle.setSize(paddleSize - sf::Vector2f(3, 3));
@@ -68,6 +77,10 @@ void Game::initPaddles(){
 
 
 }
+
+/*
+  Description: Initialize the ball used in the game.
+ */
 void Game::initBall(){
     // Create the rum ball
     this->ball.setRadius(ballRadius - 3);
@@ -80,11 +93,17 @@ void Game::initBall(){
     this->ball.setTexture(&balltexture);
 }
 
+/*
+  Description: Initialize the fonts used for displaying text in the game.
+ */
 void Game::initFonts(){
     if (!this->font.loadFromFile("resources/tuffy.ttf"))
         return exit(0);
 }
 
+/*
+  Description: Initialize messages displayed during gameplay.
+ */
 void Game::initMessages(){
     this->pauseMessage.setFont(font);
     this->pauseMessage.setCharacterSize(40);
@@ -94,6 +113,9 @@ void Game::initMessages(){
     this->countScore();
 }
 
+/*
+  Description: Update the score display.
+ */
 void Game::countScore(){
     this->scoreCard.setFont(font);
     this->scoreCard.setCharacterSize(40);
@@ -106,10 +128,18 @@ void Game::countScore(){
     this->paddleSpeed = basePaddleSpeed;
 }
 
+/*
+  Description: Check if the game is currently running.
+  Returns:
+  - True if the game is running, false otherwise.
+ */
 const bool Game::running() const{
 	return this->window->isOpen();
 }
 
+/*
+  Description: Poll and handle user events.
+ */
 void Game::pollEvents(){
     while (this->window->pollEvent(this->event)){
             // Window closed or escape key pressed: exit
@@ -151,6 +181,9 @@ void Game::pollEvents(){
         }
 }
 
+/*
+  Description: Move the paddles based on user input and update the ball's position.
+ */
 void Game::movePaddles(){
      if (this->isPlaying){
         float deltaTime = clock.restart().asSeconds();
@@ -196,6 +229,10 @@ void Game::movePaddles(){
 
     }
 }
+
+/*
+  Description: Check for collisions and handle their effects.
+ */
 void Game::checkCollisions(){
     const std::string inputString = "Press space to restart or\nescape to exit.";
     // Check collisions between the ball and the screen
@@ -265,6 +302,9 @@ void Game::checkCollisions(){
     }
     this->moveDanny();
 }
+/*
+  Description: Move the "danny" sprite and handle collisions with the screen.
+ */
 void Game::moveDanny(){
     // Check collisions between the danny and the screen
     if (sprite.getPosition().x <= 0.f){
@@ -284,10 +324,18 @@ void Game::moveDanny(){
         this->sprite.setPosition(sprite.getPosition().x, gameHeight - ballRadius - 0.1f);
     }
 }
+
+/*
+  Description: Increment the ball speed and reposition the sprite.
+ */
 void Game::point(){
     this->ballSpeed+=100;
     this->sprite.setPosition(rand() % 700 + 100, rand() % 500 + 100);
 }
+
+/*
+  Description: Update the "danny" sprite animation.
+ */
 void Game::danny(){
     if (this->dannyClock.getElapsedTime().asSeconds() > 0.5f){
       if (dannySprite.left > 64) 
@@ -299,6 +347,9 @@ void Game::danny(){
       this->dannyClock.restart();
     }
 }
+/*
+  Description: Update game logic and render objects on the screen.
+ */
 void Game::rungame(){
     while (this->window->isOpen()){
         // Handle events
@@ -330,7 +381,9 @@ void Game::rungame(){
         this->window->display();
     }
 }
-
+/*
+  Description: Constructor for the Game class. Initializes various components of the game.
+ */
 Game::Game()
 {
 	this->initVariables();
