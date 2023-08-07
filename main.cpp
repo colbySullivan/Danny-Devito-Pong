@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Game.h"
+#include "Game.hpp"
 #include "Game.cpp"
 
 int main(){

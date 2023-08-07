@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Game.hpp"
 #include <string> 
 
 void Game::initVariables(){
