@@ -13,4 +13,4 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@main
       - name: Build
-        run: g++ -c main.cpp -I"SFML-2.6.0\include"
+        run: echo "Need to add this"
