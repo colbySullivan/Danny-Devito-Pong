@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Compile
 
 on:
   push:
@@ -7,11 +7,10 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: g++ -c main.cpp -I"SFML-2.6.0\include"
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - name: Build
+        run: g++ -c main.cpp -I"SFML-2.6.0\include"
